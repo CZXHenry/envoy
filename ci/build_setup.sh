@@ -10,6 +10,7 @@ export PPROF_PATH=/thirdparty_build/bin/pprof
 [ -z "${ENVOY_SRCDIR}" ] && export ENVOY_SRCDIR=/source
 echo "ENVOY_SRCDIR=${ENVOY_SRCDIR}"
 
+
 function setup_gcc_toolchain() {
   export CC=gcc
   export CXX=g++
@@ -59,8 +60,12 @@ rm -f "${SENTINEL}"
 export USER=bazel
 export TEST_TMPDIR=/build/tmp
 export BAZEL="bazel"
+
+# test
+export DEPENDENCY_DIR=../source/envoy-dependency
+
 # Not sandboxing, since non-privileged Docker can't do nested namespaces.
-BAZEL_OPTIONS="--package_path %workspace%:${ENVOY_SRCDIR}"
+BAZEL_OPTIONS="--package_path %workspace%:${ENVOY_SRCDIR} --distdir=${DEPENDENCY_DIR}"
 export BAZEL_QUERY_OPTIONS="${BAZEL_OPTIONS}"
 export BAZEL_BUILD_OPTIONS="--strategy=Genrule=standalone --spawn_strategy=standalone \
   --verbose_failures ${BAZEL_OPTIONS} --action_env=HOME --action_env=PYTHONUSERBASE \
@@ -86,7 +91,7 @@ if [ "$1" != "-nofetch" ]; then
   then
     git clone https://github.com/envoyproxy/envoy-filter-example.git "${ENVOY_FILTER_EXAMPLE_SRCDIR}"
   fi
-  
+
   # This is the hash on https://github.com/envoyproxy/envoy-filter-example.git we pin to.
   (cd "${ENVOY_FILTER_EXAMPLE_SRCDIR}" && git fetch origin && git checkout -f 6c0625cb4cc9a21df97cef2a1d065463f2ae81ae)
   cp -f "${ENVOY_SRCDIR}"/ci/WORKSPACE.filter.example "${ENVOY_FILTER_EXAMPLE_SRCDIR}"/WORKSPACE

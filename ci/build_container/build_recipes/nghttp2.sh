@@ -5,8 +5,9 @@ set -e
 VERSION=1.34.0
 SHA256=8889399ddd38aa0405f6e84f1c050a292286089441686b8a9c5e937de4f5b61d
 
-curl https://github.com/nghttp2/nghttp2/releases/download/v"$VERSION"/nghttp2-"$VERSION".tar.gz -sLo nghttp2-"$VERSION".tar.gz \
-  && echo "$SHA256" nghttp2-"$VERSION".tar.gz | sha256sum --check
+#curl https://github.com/nghttp2/nghttp2/releases/download/v"$VERSION"/nghttp2-"$VERSION".tar.gz -sLo nghttp2-"$VERSION".tar.gz \
+#  && echo "$SHA256" nghttp2-"$VERSION".tar.gz | sha256sum --check
+cp $HOME/envoy-dependency/nghttp2-"$VERSION".tar.gz .
 tar xf nghttp2-"$VERSION".tar.gz
 cd nghttp2-"$VERSION"
 
